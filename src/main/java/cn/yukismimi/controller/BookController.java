@@ -63,4 +63,9 @@ public class BookController {
         bookService.deleteBook(Integer.parseInt(map.get("id")));
         return book;
     }
+
+    @RequestMapping("/test")
+    public void test(){
+        System.out.println("Test");
+    }
 }

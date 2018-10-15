@@ -28,7 +28,6 @@ public class BookController {
     @RequestMapping("/findAll")
     @ResponseBody
     public List<Book> findAll(){
-        System.out.println("すみません。");
         return bookService.findAll();
     }
 
@@ -57,7 +56,7 @@ public class BookController {
         return findBook(Integer.parseInt(map.get("id")));
     }
 
-    @RequestMapping("deleteBook")
+    @RequestMapping("/deleteBook")
     @ResponseBody
     public Book deleteBook(@RequestBody Map<String,String> map){
         Book book = bookService.findBook(Integer.parseInt(map.get("id")));

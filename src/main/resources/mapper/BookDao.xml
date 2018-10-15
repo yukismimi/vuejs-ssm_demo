@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="cn.yukismimi.dao.IBookDao">
+
+    <select id="findBook" resultType="Book" parameterType="int">
+        SELECT * FROM book
+        WHERE id=#{id}
+    </select>
+
+    <select id="findAll" resultType="Book">
+        SELECT * FROM book
+    </select>
+
+    <update id="updateBook" parameterType="Book">
+        UPDATE book
+        SET name=#{name},author=#{author},price=#{price}
+        WHERE id=#{id}
+    </update>
+
+    <insert id="addBook" parameterType="Book">
+        INSERT INTO book
+        VALUES (#{id},#{name},#{author},#{price})
+    </insert>
+
+    <delete id="deleteBook" parameterType="int">
+        DELETE FROM book
+        WHERE id=#{id}
+    </delete>
+</mapper>

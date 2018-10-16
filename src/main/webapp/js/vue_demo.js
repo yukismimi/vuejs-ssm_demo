@@ -3,13 +3,9 @@ var id = 0;
 var vm = new Vue({
                 
                 el : "#app",
-        // 计算函数 动态变化的数据            
-                
                 methods : {     //   写函数
                     
                     addBook : function(){
-                        var flag = false;
-                        //this.book.id = this.books.length + 1;
                         try {
                             this.book.id = this.books[this.books.length - 1].id + 1;
                         }catch (e) {
@@ -28,16 +24,15 @@ var vm = new Vue({
                         })
                             .then(function (res) {
                                 console.log(res.data)
+                                vm.books = res.data;
+                                vm.book = [];
                             })
                             .catch(function (reason) {
                                 console.log(reason.data)
                             })
-                        this.books.push(this.book);
-                        this.book = {}
                     },
                     
                     delBook : function(book){
-                        var flag = false;
                         axios({
                             method:'POST',
                             url:'/book/deleteBook',
@@ -47,20 +42,32 @@ var vm = new Vue({
                         })
                             .then(function (res) {
                                 console.log(res.data)
+                                vm.books = res.data;
                             })
                             .catch(function (reason) {
                                 console.log(reason.data)
                             })
-                        this.books.splice(book.id-1,1)
                     },
                     
         // 修改按钮                
                     updateBook : function(book){
-                        
                         $("#add-book").css("display","none");
                         $("#update-book").css("display","block");
                         id = book.id;
-                        
+                        axios({
+                            method:'post',
+                            url:'/book/findBook',
+                            data:{
+                                id:id
+                            }
+                        })
+                            .then(function (res) {
+                                vm.book = res.data
+                                console.log(res.data)
+                            })
+                            .catch(function (reason) {
+                                console.log(reason.data)
+                            })
                     },
         
         // 修改完成后的 确认按钮点击事件
@@ -79,14 +86,12 @@ var vm = new Vue({
                         })
                             .then(function (res) {
                                 console.log(res.data);
+                                vm.books = res.data;
+                                vm.book = [];
                             })
                             .catch(function (reason) {
                                 console.log(reason.data);
                             });
-                        this.books.splice(id - 1, 1, this.book);
-                        $("#add-book").css("display", "block");
-                        $("#update-book").css("display", "none");
-                        this.book = {};
                     }
                     
                 },
@@ -100,7 +105,7 @@ var vm = new Vue({
                         var search = this.search;
                     
                         return books.filter(function(book){
-                            return book.name.toLowerCase().indexOf(search.toLocaleLowerCase()) != -1                        
+                            return book.name.toLowerCase().indexOf(search.toLocaleLowerCase()) != -1
                         });        
                     },
                     
@@ -117,8 +122,8 @@ var vm = new Vue({
                     books : [],
                     
                     search : ""      // 查询功能，""中不能加空格，否则默认查询空格
-                    
                 },
+
                 mounted : function () {
                     var books = this.books;
                     axios({

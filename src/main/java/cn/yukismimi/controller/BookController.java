@@ -21,8 +21,8 @@ public class BookController {
 
     @RequestMapping("/findBook")
     @ResponseBody
-    public Book findBook(int id){
-        return bookService.findBook(id);
+    public Book findBook(@RequestBody Map<String,String> map){
+        return bookService.findBook(Integer.parseInt(map.get("id")));
     }
 
     @RequestMapping("/findAll")
@@ -33,35 +33,33 @@ public class BookController {
 
     @RequestMapping("/updateBook")
     @ResponseBody
-    public Book updateBook(@RequestBody Map<String,String> map){
+    public List<Book> updateBook(@RequestBody Map<String,String> map){
         Book book = new Book();
         book.setId(Integer.parseInt(map.get("id")));
         book.setName(map.get("name"));
         book.setAuthor(map.get("author"));
         book.setPrice(Float.parseFloat(map.get("price")));
         bookService.updateBook(book);
-        return findBook(Integer.parseInt(map.get("id")));
+        return findAll();
     }
 
     @RequestMapping("/addBook")
     @ResponseBody
-    public Book addBook(@RequestBody Map<String,String> map){
+    public List<Book> addBook(@RequestBody Map<String,String> map){
         Book book = new Book();
         book.setId(Integer.parseInt(map.get("id")));
         book.setName(map.get("name"));
         book.setAuthor(map.get("author"));
         book.setPrice(Float.parseFloat(map.get("price")));
         bookService.addBook(book);
-        System.out.println("Hello");
-        return findBook(Integer.parseInt(map.get("id")));
+        return findAll();
     }
 
     @RequestMapping("/deleteBook")
     @ResponseBody
-    public Book deleteBook(@RequestBody Map<String,String> map){
-        Book book = bookService.findBook(Integer.parseInt(map.get("id")));
+    public List<Book> deleteBook(@RequestBody Map<String,String> map){
         bookService.deleteBook(Integer.parseInt(map.get("id")));
-        return book;
+        return findAll();
     }
 
     @RequestMapping("/test")
